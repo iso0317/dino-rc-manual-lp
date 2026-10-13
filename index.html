@@ -236,7 +236,14 @@ footer{margin-top:40px;background:var(--green-dd);color:#cfe2d3;text-align:cente
 <script>
 // 再生中の動画は1つだけにする
 const vids=[...document.querySelectorAll('video')];
-vids.forEach(v=>v.addEventListener('play',()=>vids.forEach(o=>{if(o!==v)o.pause()})));
+vids.forEach(v=>{
+  v.addEventListener('play',()=>{
+    vids.forEach(o=>{if(o!==v)o.pause()});
+    v.controls=false;            // 再生中は操作ボタンを隠して映像を見やすくする
+  });
+  v.addEventListener('pause',()=>{v.controls=true});  // 停止中は操作ボタンを表示
+  v.addEventListener('click',()=>{if(!v.paused&&!v.controls)v.pause()});  // 再生中に画面をタップで一時停止
+});
 </script>
 </body>
 </html>
