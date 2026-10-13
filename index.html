@@ -81,9 +81,9 @@ video.portrait{max-height:70vh;width:auto;max-width:100%;margin:0 auto}
 .vbar{display:flex;align-items:center;gap:8px;margin-top:8px}
 .vbar button{flex:none;border:0;border-radius:10px;background:var(--green);color:#fff;font:700 14px/1 inherit;font-family:inherit;padding:11px 12px;min-height:44px;cursor:pointer;box-shadow:0 2px 0 var(--green-dd)}
 .vbar button.vfs{background:#7a8aa0;box-shadow:0 2px 0 #5d6c80}
-.vbar .vplay{min-width:96px}
+.vbar .vplay{flex:1;font-size:15px}
 .vbar .seek{flex:1;min-width:0;accent-color:var(--orange);height:32px}
-.pair .vbar{flex-wrap:wrap}.pair .vbar .seek{display:none}.pair .vbar button{flex:1;padding:11px 4px;min-width:0}
+.pair .vbar button{font-size:13px;padding:11px 2px}
 video{cursor:pointer}
 
 /* cooling meter */
@@ -157,7 +157,7 @@ footer{margin-top:40px;background:var(--green-dd);color:#cfe2d3;text-align:cente
       </div>
       <figure>
         <video playsinline preload="metadata" poster="assets/battery.jpg" src="assets/battery.mp4"></video>
-        <div class="vbar"><button type="button" class="vplay" aria-label="再生">▶ 再生</button><input type="range" class="seek" min="0" max="1000" value="0" aria-label="再生位置"><button type="button" class="vfs" aria-label="全画面">⛶ 全画面</button></div>
+        <div class="vbar"><button type="button" class="vplay">▶ 全画面で再生</button></div>
         <figcaption>バッテリーの入れ方、外し方</figcaption>
       </figure>
     </div>
@@ -170,7 +170,7 @@ footer{margin-top:40px;background:var(--green-dd);color:#cfe2d3;text-align:cente
     <div class="cols">
       <figure>
         <video playsinline preload="metadata" poster="assets/power.jpg" src="assets/power.mp4"></video>
-        <div class="vbar"><button type="button" class="vplay" aria-label="再生">▶ 再生</button><input type="range" class="seek" min="0" max="1000" value="0" aria-label="再生位置"><button type="button" class="vfs" aria-label="全画面">⛶ 全画面</button></div>
+        <div class="vbar"><button type="button" class="vplay">▶ 全画面で再生</button></div>
         <figcaption>電源の入れ方、切り方</figcaption>
       </figure>
       <div class="box orange">
@@ -193,7 +193,7 @@ footer{margin-top:40px;background:var(--green-dd);color:#cfe2d3;text-align:cente
     <div class="cols">
       <figure>
         <video class="portrait" playsinline preload="metadata" poster="assets/posture.jpg" src="assets/posture.mp4"></video>
-        <div class="vbar"><button type="button" class="vplay" aria-label="再生">▶ 再生</button><input type="range" class="seek" min="0" max="1000" value="0" aria-label="再生位置"><button type="button" class="vfs" aria-label="全画面">⛶ 全画面</button></div>
+        <div class="vbar"><button type="button" class="vplay">▶ 全画面で再生</button></div>
         <figcaption>姿勢を整える＆スイッチを入れる</figcaption>
       </figure>
       <div>
@@ -202,13 +202,13 @@ footer{margin-top:40px;background:var(--green-dd);color:#cfe2d3;text-align:cente
           <figure>
             <span class="tag ng">✕ 失敗例</span>
             <video class="portrait" playsinline preload="metadata" poster="assets/fail.jpg" src="assets/fail.mp4"></video>
-        <div class="vbar"><button type="button" class="vplay" aria-label="再生">▶ 再生</button><input type="range" class="seek" min="0" max="1000" value="0" aria-label="再生位置"><button type="button" class="vfs" aria-label="全画面">⛶ 全画面</button></div>
+        <div class="vbar"><button type="button" class="vplay">▶ 全画面で再生</button></div>
             <figcaption>姿勢が整っておらず失敗</figcaption>
           </figure>
           <figure>
             <span class="tag ok">◎ 成功例</span>
             <video class="portrait" playsinline preload="metadata" poster="assets/success.jpg" src="assets/success.mp4"></video>
-        <div class="vbar"><button type="button" class="vplay" aria-label="再生">▶ 再生</button><input type="range" class="seek" min="0" max="1000" value="0" aria-label="再生位置"><button type="button" class="vfs" aria-label="全画面">⛶ 全画面</button></div>
+        <div class="vbar"><button type="button" class="vplay">▶ 全画面で再生</button></div>
             <figcaption>成功＆コントローラー操作</figcaption>
           </figure>
         </div>
@@ -252,18 +252,21 @@ footer{margin-top:40px;background:var(--green-dd);color:#cfe2d3;text-align:cente
 // 再生中の動画は1つだけにする
 const vids=[...document.querySelectorAll('video')];
 vids.forEach(v=>{
-  const bar=v.nextElementSibling, play=bar.querySelector('.vplay'), seek=bar.querySelector('.seek'), fs=bar.querySelector('.vfs');
-  const toggle=()=>{v.paused?v.play():v.pause()};
-  play.onclick=toggle; v.onclick=toggle;
-  v.addEventListener('play',()=>{vids.forEach(o=>{if(o!==v)o.pause()});play.textContent='⏸ 停止'});
-  v.addEventListener('pause',()=>{play.textContent=v.ended?'↻ もう一度':'▶ 再生'});
-  v.addEventListener('timeupdate',()=>{if(v.duration)seek.value=v.currentTime/v.duration*1000});
-  seek.oninput=()=>{if(v.duration)v.currentTime=seek.value/1000*v.duration};
-  fs.onclick=()=>{
-    if(v.requestFullscreen)v.requestFullscreen();
-    else if(v.webkitEnterFullscreen)v.webkitEnterFullscreen();   // iPhone
+  const open=()=>{
+    vids.forEach(o=>{if(o!==v)o.pause()});
+    v.controls=true;
+    const p=v.play();
+    if(v.webkitEnterFullscreen&&!v.requestFullscreen)v.webkitEnterFullscreen();   // iPhone
+    else if(v.requestFullscreen)v.requestFullscreen().catch(()=>{});
     else if(v.webkitRequestFullscreen)v.webkitRequestFullscreen();
+    if(p&&p.catch)p.catch(()=>{});
   };
+  const close=()=>{v.pause();v.controls=false};
+  v.onclick=open;
+  v.nextElementSibling.querySelector('.vplay').onclick=open;
+  v.addEventListener('webkitendfullscreen',close);          // iPhone: 「完了」で戻ったら停止
+  v.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement)close()});
+  v.addEventListener('webkitfullscreenchange',()=>{if(!document.webkitFullscreenElement&&!document.fullscreenElement)close()});
 });
 </script>
 </body>
