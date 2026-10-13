@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>歩く恐竜ラジコン 操作マニュアル</title>
+<meta name="description" content="歩く恐竜ラジコンの充電・バッテリー・電源・立ち上がり・冷却までを、動画つきで解説する操作マニュアル。">
+<meta name="robots" content="noindex">
+<style>
+:root{
+  --bg:#fbf6ec; --card:#fff; --ink:#2b2a26; --sub:#6b665b;
+  --green:#2f6b3f; --green-d:#1f4a2b; --orange:#e2862b; --red:#c8402f; --line:#e9dfca;
+  --ok:#2f8f4e; --ng:#c8402f;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif;line-height:1.8;font-size:17px}
+img,video{max-width:100%;display:block}
+a{color:inherit}
+.wrap{max-width:880px;margin:0 auto;padding:0 16px}
+
+/* hero */
+.hero{background:linear-gradient(160deg,var(--green-d),var(--green) 60%,#4c8a4a);color:#fff;padding:56px 0 48px;text-align:center}
+.hero small{display:inline-block;background:rgba(255,255,255,.18);border-radius:99px;padding:2px 14px;font-size:14px;letter-spacing:.08em}
+.hero h1{margin:14px 0 10px;font-size:clamp(28px,6.5vw,46px);line-height:1.35}
+.hero p{margin:0 auto;max-width:34em;opacity:.92}
+.hero .cta{display:inline-block;margin-top:24px;background:var(--orange);color:#fff;text-decoration:none;font-weight:700;padding:12px 30px;border-radius:99px}
+
+/* nav */
+nav{position:sticky;top:0;z-index:10;background:rgba(251,246,236,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+nav ul{list-style:none;margin:0;padding:0 8px;display:flex;gap:4px;overflow-x:auto;white-space:nowrap;max-width:880px;margin-inline:auto}
+nav a{display:block;padding:12px 10px;font-size:14px;font-weight:700;text-decoration:none;color:var(--green-d)}
+nav a:hover{color:var(--orange)}
+
+/* overview */
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:32px 0;padding:0;list-style:none;counter-reset:f}
+.flow li{counter-increment:f;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center;font-weight:700;font-size:15px}
+.flow li::before{content:counter(f);display:block;width:28px;height:28px;margin:0 auto 4px;border-radius:50%;background:var(--green);color:#fff;line-height:28px;font-size:14px}
+
+/* steps */
+section.step{padding:48px 0 8px}
+.badge{display:inline-block;background:var(--green);color:#fff;font-weight:700;font-size:14px;border-radius:6px;padding:1px 12px;letter-spacing:.06em}
+h2{margin:8px 0 12px;font-size:clamp(22px,5vw,30px);line-height:1.4}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:16px 0;box-shadow:0 2px 8px rgba(80,60,20,.05)}
+.card h3{margin:0 0 6px;font-size:18px}
+.card p{margin:0}
+.note{border-left:5px solid var(--orange);background:#fff3e1;padding:12px 16px;border-radius:0 10px 10px 0;margin:16px 0;font-size:16px}
+.warn{border-left-color:var(--red);background:#fdeceb}
+em{font-style:normal;font-weight:700;background:linear-gradient(transparent 62%,#ffe08a 62%)}
+
+/* video */
+figure{margin:0}
+figcaption{font-size:14px;color:var(--sub);margin-top:6px;text-align:center}
+video{width:100%;border-radius:12px;background:#000}
+video.portrait{max-height:75vh;width:auto;margin:0 auto}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tag{display:inline-block;font-weight:700;font-size:14px;color:#fff;border-radius:6px;padding:0 10px;margin-bottom:6px}
+.tag.ok{background:var(--ok)}.tag.ng{background:var(--ng)}
+.photos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.photos img{border-radius:12px;width:100%;aspect-ratio:4/3;object-fit:cover}
+
+/* cooling */
+.cool{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;margin:12px 0}
+.cool div{border-radius:12px;padding:12px 6px;color:#fff;font-weight:700;font-size:15px;line-height:1.4}
+.cool b{display:block;font-size:26px}
+.cool .a{background:var(--green)}.cool .b{background:var(--orange)}.cool .c{background:#7a8aa0}
+.steps-list{padding-left:1.3em;margin:8px 0 0}
+
+footer{margin-top:64px;background:var(--green-d);color:#d9e8dc;text-align:center;padding:28px 16px;font-size:14px}
+@media (max-width:560px){body{font-size:16px}.pair{gap:8px}.card{padding:16px}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <small>操作マニュアル</small>
+    <h1>歩く恐竜ラジコン<br>はじめての使い方</h1>
+    <p>充電から立ち上がり、お休み中の冷却まで。動画を見ながら、順番にすすめれば大丈夫です。</p>
+    <a class="cta" href="#s1">マニュアルをはじめる ↓</a>
+  </div>
+</header>
+
+<nav aria-label="目次">
+  <ul>
+    <li><a href="#s1">充電</a></li>
+    <li><a href="#s2">バッテリー</a></li>
+    <li><a href="#s3">電源</a></li>
+    <li><a href="#s4">姿勢・操作</a></li>
+    <li><a href="#s5">冷却</a></li>
+  </ul>
+</nav>
+
+<main class="wrap">
+
+  <ol class="flow">
+    <li>充電する</li>
+    <li>バッテリーを入れる</li>
+    <li>姿勢を整える</li>
+    <li>電源を入れる</li>
+    <li>操作する</li>
+    <li>休ませて冷却</li>
+  </ol>
+
+  <section class="step" id="s1">
+    <span class="badge">STEP 1</span>
+    <h2>バッテリーを充電する</h2>
+    <div class="card">
+      <p>バッテリーと充電器をつなぎます。バッテリーの<em>差し込み口に充電器を挿して</em>、充電器をコンセントにつなぐと充電が始まります。</p>
+    </div>
+    <div class="photos">
+      <figure><img loading="lazy" src="assets/fan1.jpg" alt="恐竜ラジコンのお腹の中のファン"><figcaption>同梱のファン</figcaption></figure>
+      <figure><img loading="lazy" src="assets/fan2.jpg" alt="青いバッテリー（右下）と灰色の充電器（中央）"><figcaption>青いバッテリー・灰色の充電器・ファン</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="step" id="s2">
+    <span class="badge">STEP 2</span>
+    <h2>バッテリーの入れ方・外し方</h2>
+    <div class="card">
+      <p>バッテリーの差込口は、ラジコンの<em>お腹のあたり</em>にあります。</p>
+      <ul class="steps-list">
+        <li><b>入れるとき：</b>雷マークを<em>上</em>にして差し込みます。</li>
+        <li><b>外すとき：</b>2つのツマミを<em>内側に引き寄せて</em>取り出します。</li>
+      </ul>
+    </div>
+    <figure>
+      <video controls playsinline preload="metadata" poster="assets/battery.jpg" src="assets/battery.mp4"></video>
+      <figcaption>バッテリーの入れ方、外し方</figcaption>
+    </figure>
+  </section>
+
+  <section class="step" id="s3">
+    <span class="badge">STEP 3</span>
+    <h2>電源の入れ方・切り方</h2>
+    <div class="card">
+      <p>電源のオン・オフは、どちらも<em>2回のタップ</em>が必要です。<em>2回目のタップは長押し</em>です。</p>
+    </div>
+    <figure>
+      <video controls playsinline preload="metadata" poster="assets/power.jpg" src="assets/power.mp4"></video>
+      <figcaption>電源の入れ方、切り方</figcaption>
+    </figure>
+  </section>
+
+  <section class="step" id="s4">
+    <span class="badge">STEP 4</span>
+    <h2>電源を入れる前に、姿勢を整える</h2>
+    <div class="note warn">
+      <b>いちばん大切なポイント</b><br>
+      電源を入れる前に、足を整えて<em>伏せをしているような姿勢</em>にしてください。少しでも足が曲がっていると、うまく立ち上がれずに転んでしまい、<em>その後に操作しても動きません。</em>
+    </div>
+
+    <figure>
+      <video class="portrait" controls playsinline preload="metadata" poster="assets/posture.jpg" src="assets/posture.mp4"></video>
+      <figcaption>姿勢を整える＆スイッチを入れる</figcaption>
+    </figure>
+
+    <h3 style="margin:32px 0 8px">立ち上がり：失敗と成功</h3>
+    <div class="pair">
+      <figure>
+        <span class="tag ng">× 失敗例</span>
+        <video class="portrait" controls playsinline preload="metadata" poster="assets/fail.jpg" src="assets/fail.mp4"></video>
+        <figcaption>姿勢が整っておらず、立ち上がりに失敗</figcaption>
+      </figure>
+      <figure>
+        <span class="tag ok">○ 成功例</span>
+        <video class="portrait" controls playsinline preload="metadata" poster="assets/success.jpg" src="assets/success.mp4"></video>
+        <figcaption>立ち上がり成功＆コントローラー操作</figcaption>
+      </figure>
+    </div>
+    <p style="font-size:14px;color:var(--sub);margin-top:8px">成功例の動画では、立ち上がったあとのコントローラー操作も確認できます。</p>
+  </section>
+
+  <section class="step" id="s5">
+    <span class="badge">STEP 5</span>
+    <h2>お休み中は、ファンで内部を冷却</h2>
+    <div class="note warn">
+      このラジコンは内部に熱がこもり、<em>10〜15分ほどでオーバーヒート</em>します。オーバーヒートすると伏せの姿勢に戻り、動かなくなります。
+    </div>
+
+    <div class="card">
+      <h3>オーバーヒートしたら</h3>
+      <ol class="steps-list">
+        <li>いったん<em>テントに戻します</em>。</li>
+        <li><em>バッテリーを外します</em>。</li>
+        <li>同梱の<em>ファンをお腹の中にあてて</em>冷やします。冷却が早まり、次の立ち上がりも早くなります。</li>
+      </ol>
+    </div>
+
+    <div class="photos">
+      <figure><img loading="lazy" src="assets/fan1.jpg" alt="お腹のファスナーを開け、内部にファンをあてている様子"><figcaption>お腹を開けてファンをあてる</figcaption></figure>
+      <figure><img loading="lazy" src="assets/fan2.jpg" alt="ファンで恐竜ラジコンの内部を冷却している様子"><figcaption>ファンで内部を冷却</figcaption></figure>
+    </div>
+
+    <h3 style="margin:28px 0 4px">稼働の目安（1時間あたり）</h3>
+    <div class="cool">
+      <div class="a">稼働<b>10〜15分</b></div>
+      <div class="b">休憩・冷却<b>45分</b></div>
+      <div class="c">くり返し<b>↻</b></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  せかいの恐竜ワンダーランド　歩く恐竜ラジコン 操作マニュアル
+</footer>
+
+<script>
+// 再生中の動画は1つだけにする
+const vids=[...document.querySelectorAll('video')];
+vids.forEach(v=>v.addEventListener('play',()=>vids.forEach(o=>{if(o!==v)o.pause()})));
+</script>
+</body>
+</html>
