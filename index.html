@@ -76,6 +76,16 @@ video.portrait{max-height:70vh;width:auto;max-width:100%;margin:0 auto}
 .photos img{border-radius:12px;width:100%;aspect-ratio:4/3;object-fit:cover;box-shadow:0 3px 10px rgba(0,0,0,.15)}
 .photos.three img{aspect-ratio:3/4}
 
+
+/* 動画の操作バー（映像の外・下に配置） */
+.vbar{display:flex;align-items:center;gap:8px;margin-top:8px}
+.vbar button{flex:none;border:0;border-radius:10px;background:var(--green);color:#fff;font:700 14px/1 inherit;font-family:inherit;padding:11px 12px;min-height:44px;cursor:pointer;box-shadow:0 2px 0 var(--green-dd)}
+.vbar button.vfs{background:#7a8aa0;box-shadow:0 2px 0 #5d6c80}
+.vbar .vplay{flex:1;font-size:15px}
+.vbar .seek{flex:1;min-width:0;accent-color:var(--orange);height:32px}
+.pair .vbar button{font-size:13px;padding:11px 2px}
+video{cursor:pointer}
+
 /* cooling meter */
 .meter-title{display:flex;align-items:center;gap:8px;margin:20px 0 8px;font-weight:700;color:var(--green-dd)}
 .meter-title small{color:var(--sub);font-weight:400}
@@ -146,7 +156,8 @@ footer{margin-top:40px;background:var(--green-dd);color:#cfe2d3;text-align:cente
         </div>
       </div>
       <figure>
-        <video controls playsinline preload="metadata" poster="assets/battery.jpg" src="assets/battery.mp4"></video>
+        <video playsinline preload="metadata" poster="assets/battery.jpg" src="assets/battery.mp4"></video>
+        <div class="vbar"><button type="button" class="vplay">▶ 全画面で再生</button></div>
         <figcaption>バッテリーの入れ方、外し方</figcaption>
       </figure>
     </div>
@@ -158,7 +169,8 @@ footer{margin-top:40px;background:var(--green-dd);color:#cfe2d3;text-align:cente
     <p class="lead">電源のオン・オフは、どちらも同じ操作です。</p>
     <div class="cols">
       <figure>
-        <video controls playsinline preload="metadata" poster="assets/power.jpg" src="assets/power.mp4"></video>
+        <video playsinline preload="metadata" poster="assets/power.jpg" src="assets/power.mp4"></video>
+        <div class="vbar"><button type="button" class="vplay">▶ 全画面で再生</button></div>
         <figcaption>電源の入れ方、切り方</figcaption>
       </figure>
       <div class="box orange">
@@ -180,7 +192,8 @@ footer{margin-top:40px;background:var(--green-dd);color:#cfe2d3;text-align:cente
     </div>
     <div class="cols">
       <figure>
-        <video class="portrait" controls playsinline preload="metadata" poster="assets/posture.jpg" src="assets/posture.mp4"></video>
+        <video class="portrait" playsinline preload="metadata" poster="assets/posture.jpg" src="assets/posture.mp4"></video>
+        <div class="vbar"><button type="button" class="vplay">▶ 全画面で再生</button></div>
         <figcaption>姿勢を整える＆スイッチを入れる</figcaption>
       </figure>
       <div>
@@ -188,12 +201,14 @@ footer{margin-top:40px;background:var(--green-dd);color:#cfe2d3;text-align:cente
         <div class="pair">
           <figure>
             <span class="tag ng">✕ 失敗例</span>
-            <video class="portrait" controls playsinline preload="metadata" poster="assets/fail.jpg" src="assets/fail.mp4"></video>
+            <video class="portrait" playsinline preload="metadata" poster="assets/fail.jpg" src="assets/fail.mp4"></video>
+        <div class="vbar"><button type="button" class="vplay">▶ 全画面で再生</button></div>
             <figcaption>姿勢が整っておらず失敗</figcaption>
           </figure>
           <figure>
             <span class="tag ok">◎ 成功例</span>
-            <video class="portrait" controls playsinline preload="metadata" poster="assets/success.jpg" src="assets/success.mp4"></video>
+            <video class="portrait" playsinline preload="metadata" poster="assets/success.jpg" src="assets/success.mp4"></video>
+        <div class="vbar"><button type="button" class="vplay">▶ 全画面で再生</button></div>
             <figcaption>成功＆コントローラー操作</figcaption>
           </figure>
         </div>
@@ -237,12 +252,21 @@ footer{margin-top:40px;background:var(--green-dd);color:#cfe2d3;text-align:cente
 // 再生中の動画は1つだけにする
 const vids=[...document.querySelectorAll('video')];
 vids.forEach(v=>{
-  v.addEventListener('play',()=>{
+  const open=()=>{
     vids.forEach(o=>{if(o!==v)o.pause()});
-    v.controls=false;            // 再生中は操作ボタンを隠して映像を見やすくする
-  });
-  v.addEventListener('pause',()=>{v.controls=true});  // 停止中は操作ボタンを表示
-  v.addEventListener('click',()=>{if(!v.paused&&!v.controls)v.pause()});  // 再生中に画面をタップで一時停止
+    v.controls=true;
+    const p=v.play();
+    if(v.webkitEnterFullscreen&&!v.requestFullscreen)v.webkitEnterFullscreen();   // iPhone
+    else if(v.requestFullscreen)v.requestFullscreen().catch(()=>{});
+    else if(v.webkitRequestFullscreen)v.webkitRequestFullscreen();
+    if(p&&p.catch)p.catch(()=>{});
+  };
+  const close=()=>{v.pause();v.controls=false};
+  v.onclick=open;
+  v.nextElementSibling.querySelector('.vplay').onclick=open;
+  v.addEventListener('webkitendfullscreen',close);          // iPhone: 「完了」で戻ったら停止
+  v.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement)close()});
+  v.addEventListener('webkitfullscreenchange',()=>{if(!document.webkitFullscreenElement&&!document.fullscreenElement)close()});
 });
 </script>
 </body>
